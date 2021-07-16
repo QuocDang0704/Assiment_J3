@@ -1,0 +1,67 @@
+﻿CREATE DATABASE FPL_DAO_TAO
+GO
+USE FPL_DAO_TAO
+GO
+
+IF OBJECT_ID('USERS') IS NOT NULL
+	DROP TABLE USERS
+CREATE TABLE USERS(
+	USERNAME NVARCHAR(50),
+	PASSWORD NVARCHAR(50),
+	ROLE NVARCHAR(50),
+)
+IF OBJECT_ID('STUDENT') IS NOT NULL
+	DROP TABLE STUDENT
+CREATE TABLE STUDENT(
+	MASV VARCHAR(50),
+	HOTEN NVARCHAR(50),
+	EMAIL VARCHAR(50),
+	SODT VARCHAR(15),
+	GIOITINH BIT,
+	DIACHI NVARCHAR(50),
+	HINH IMAGE,
+	CONSTRAINT PK_MASV PRIMARY KEY(MASV)
+)
+IF OBJECT_ID('GRADE') IS NOT NULL
+	DROP TABLE GRADE
+CREATE TABLE GRADE(
+	ID INT IDENTITY(1,1),
+	MASV VARCHAR(50),
+	TIENGANH INT,
+	TINHOC INT,
+	GDTC INT,
+	CONSTRAINT PK_ID PRIMARY KEY(ID),
+	CONSTRAINT FK_MASV FOREIGN KEY(MASV) REFERENCES dbo.STUDENT
+)
+
+INSERT INTO dbo.USERS VALUES('quocDT','123',N'Đào Tạo'),
+							('quocGV','123',N'Giảng Viên')
+
+
+SELECT * FROM dbo.USERS 
+SELECT * FROM dbo.GRADE
+SELECT * FROM dbo.STUDENT
+
+
+
+INSERT INTO dbo.STUDENT VALUES
+(   'ph1',   -- MASV - varchar(50)
+    N'Đặng Bảo Quốc',  -- HOTEN - nvarchar(50)
+    'a@gmail.com',   -- EMAIL - varchar(50)
+    '0123456789',   -- SODT - varchar(15)
+    1, -- GIOITINH - bit
+    N'Nam ĐỊnh',  -- DIACHI - nvarchar(50)
+    null   -- HINH - nvarchar(50)
+    )
+INSERT INTO dbo.STUDENT VALUES
+(   'ph2',   -- MASV - varchar(50)
+    N'Đặng Bảo Quốc',  -- HOTEN - nvarchar(50)
+    'a@gmail.com',   -- EMAIL - varchar(50)
+    '0123456789',   -- SODT - varchar(15)
+    0, -- GIOITINH - bit
+    N'Hà Nội',  -- DIACHI - nvarchar(50)
+    null   -- HINH - nvarchar(50)
+    )
+
+SELECT TOP 3*,(TIENGANH+TINHOC+GDTC)/3 AS dtb 
+FROM dbo.GRADE ORDER BY dtb DESC
